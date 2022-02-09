@@ -8,19 +8,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.airbnb.lottie.compose.*
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
 import com.alphitardian.trashappta.presentation.shared_components.LoadingIndicator
 import com.alphitardian.trashappta.utils.Resource
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun RegisterScreen(
@@ -54,13 +54,18 @@ fun RegisterScreen(
 
 @Composable
 fun RegisterContent(viewModel: RegisterViewModel? = null) {
+    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.register))
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        iterations = LottieConstants.IterateForever
+    )
+
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (nameFieldRef, emailFieldRef, passwordFieldRef, registerButtonRef, imageRef, greetingRef, greetingDescRef) = createRefs()
 
-        GlideImage(
-            imageModel = "https://media0.giphy.com/media/WWdPlO840YheTj8mjM/giphy.gif",
-            previewPlaceholder = R.drawable.placeholder_image,
-            contentScale = ContentScale.Fit,
+        LottieAnimation(
+            composition = lottieComposition,
+            progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

@@ -16,7 +16,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.FileProvider
+import com.airbnb.lottie.compose.*
 import com.alphitardian.trashappta.BuildConfig
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
@@ -34,7 +34,6 @@ import com.alphitardian.trashappta.presentation.solution.SolutionScreen
 import com.alphitardian.trashappta.utils.Resource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.libraries.places.api.model.Place
 import com.google.mlkit.common.model.LocalModel
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -96,6 +95,13 @@ fun DetectionContent(
     val tempUri = remember { mutableStateOf<Uri?>(null) }
     val result = viewModel?.result?.value
     var showPicture by remember { mutableStateOf(false) }
+    val lottieComposition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.walking)
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        iterations = LottieConstants.IterateForever
+    )
 
     LaunchedEffect(key1 = Unit) { viewModel?.getCurrentLocation() }
 
@@ -165,10 +171,9 @@ fun DetectionContent(
                     }
             )
         } else {
-            GlideImage(
-                imageModel = "https://media3.giphy.com/media/U0fWuOTDbgK2ANEoqP/giphy.gif",
-                previewPlaceholder = R.drawable.placeholder_image,
-                contentScale = ContentScale.Fit,
+            LottieAnimation(
+                composition = lottieComposition,
+                progress = progress,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)

@@ -8,11 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.airbnb.lottie.compose.*
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.data.quiz.remote.response.QuizResponse
 import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
@@ -63,14 +61,18 @@ fun QuizScreen(
 
 @Composable
 fun QuizContent(viewModel: QuizViewModel?) {
+    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.quiz_mode))
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        iterations = LottieConstants.IterateForever
+    )
+
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (imageRef, titleRef, buttonRef) = createRefs()
 
-        GlideImage(
-            imageModel = "https://media0.giphy.com/media/KDnZAzNpawWH1iAn1B/giphy.gif",
-            previewPlaceholder = R.drawable.placeholder_image,
-            error = painterResource(id = R.drawable.placeholder_image),
-            contentScale = ContentScale.Fit,
+        LottieAnimation(
+            composition = lottieComposition,
+            progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

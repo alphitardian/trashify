@@ -25,6 +25,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.airbnb.lottie.compose.*
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
 import com.alphitardian.trashappta.presentation.shared_components.LoadingIndicator
@@ -116,16 +117,21 @@ fun LoginContent(
     viewModel: LoginViewModel? = null,
     navigateToRegister: () -> Unit = {},
 ) {
+    val greetingAnimationSpec by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.girl_say_hi))
+    val progress by animateLottieCompositionAsState(
+        composition = greetingAnimationSpec,
+        iterations = LottieConstants.IterateForever
+    )
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
     ) {
         val (emailFieldRef, passwordFieldRef, loginButtonRef, imageRef, greetingRef, greetingDescRef, registerButtonRef) = createRefs()
-
-        GlideImage(
-            imageModel = "https://media3.giphy.com/media/IblZiTbdRjV6lMEapl/giphy.gif",
-            previewPlaceholder = R.drawable.placeholder_image,
-            contentScale = ContentScale.Fit,
+        
+        LottieAnimation(
+            composition = greetingAnimationSpec,
+            progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

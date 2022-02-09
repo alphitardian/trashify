@@ -99,6 +99,7 @@ object NetworkModule {
             .addConverterFactory(Json.asConverterFactory(contentType))
     }
 
+    @ExperimentalSerializationApi
     @ImageRetrofit
     @Provides
     @Singleton

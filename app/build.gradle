@@ -140,4 +140,7 @@ dependencies {
 
     // JWT Decoder
     implementation 'com.auth0.android:jwtdecode:2.0.1'
+
+    // Lottie Airbnb Animation
+    implementation "com.airbnb.android:lottie-compose:4.2.2"
 }

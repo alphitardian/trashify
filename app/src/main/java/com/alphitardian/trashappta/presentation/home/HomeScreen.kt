@@ -1,6 +1,5 @@
 package com.alphitardian.trashappta.presentation.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,8 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -17,21 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.airbnb.lottie.compose.*
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.data.user.remote.response.ProfileResponse
 import com.alphitardian.trashappta.utils.Resource
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.placeholder
 
 @Composable
 fun HomeScreen(
@@ -149,7 +142,7 @@ fun HomeContent(
         )
 
         HomeMenuButton(
-            icon = painterResource(id = R.drawable.camera),
+            icon = R.raw.camera,
             text = "Scan Trash",
             backgroundColor = Color.Red.copy(0.45f),
             textColor = Color.White,
@@ -162,8 +155,9 @@ fun HomeContent(
         )
 
         HomeMenuButton(
-            icon = painterResource(id = R.drawable.book),
+            icon = R.raw.quiz,
             text = "Quiz",
+            isIconIterate = true,
             backgroundColor = Color.Yellow.copy(0.45f),
             textColor = Color.Red.copy(0.45f),
             modifier = Modifier
@@ -171,11 +165,12 @@ fun HomeContent(
                 .constrainAs(quizButtonRef) {
                     top.linkTo(subtitleRef.bottom, margin = 28.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                }
+                },
+            lottieModifier = Modifier.size(120.dp)
         )
 
         HomeMenuButton(
-            icon = painterResource(id = R.drawable.history),
+            icon = R.raw.history,
             text = "History",
             backgroundColor = Color.Magenta.copy(0.25f),
             textColor = Color.White,
@@ -188,8 +183,9 @@ fun HomeContent(
         )
 
         HomeMenuButton(
-            icon = painterResource(id = R.drawable.profile),
+            icon = R.raw.woman_profile_icon,
             text = "Profile",
+            isIconIterate = true,
             backgroundColor = Color.Cyan.copy(0.25f),
             textColor = Color.DarkGray,
             modifier = Modifier
@@ -197,12 +193,14 @@ fun HomeContent(
                 .constrainAs(mapsButtonRef) {
                     top.linkTo(quizButtonRef.bottom, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                }
+                },
+            lottieModifier = Modifier.size(120.dp)
         )
 
         HomeMenuButton(
-            icon = painterResource(id = R.drawable.anxiety),
+            icon = R.raw.banking_finance_icon,
             text = "Waste Bank",
+            isIconIterate = true,
             backgroundColor = Color.Green.copy(0.25f),
             textColor = Color.Black,
             modifier = Modifier
@@ -218,12 +216,20 @@ fun HomeContent(
 
 @Composable
 fun HomeMenuButton(
-    icon: Painter,
+    icon: Int,
     text: String,
     modifier: Modifier = Modifier,
+    lottieModifier: Modifier = Modifier,
+    isIconIterate: Boolean = false,
     backgroundColor: Color = Color.LightGray,
     textColor: Color = Color.Black,
 ) {
+    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(icon))
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        iterations = if (isIconIterate) LottieConstants.IterateForever else 1
+    )
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -234,10 +240,10 @@ fun HomeMenuButton(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = icon,
-                contentDescription = null,
-                modifier = Modifier.size(88.dp)
+            LottieAnimation(
+                composition = lottieComposition,
+                progress = progress,
+                modifier = lottieModifier.size(100.dp)
             )
             Text(
                 text = text,
