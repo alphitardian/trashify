@@ -6,4 +6,5 @@ interface UserDataSource {
     suspend fun registerAccount(registerRequest: RegisterRequest): RegisterResponse
     suspend fun loginAccount(loginRequest: LoginRequest): LoginResponse
     suspend fun getUserProfile(): ProfileResponse
+    suspend fun updateUserProfile(profileRequest: ProfileRequest): ProfileResponse
 }

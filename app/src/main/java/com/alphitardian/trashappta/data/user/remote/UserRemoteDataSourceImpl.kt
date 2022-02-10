@@ -16,4 +16,8 @@ class UserRemoteDataSourceImpl @Inject constructor(private val userApi: UserApi)
     override suspend fun getUserProfile(): ProfileResponse {
         return userApi.getUserProfile()
     }
+
+    override suspend fun updateUserProfile(profileRequest: ProfileRequest): ProfileResponse {
+        return userApi.updateUserProfile(profileRequest)
+    }
 }

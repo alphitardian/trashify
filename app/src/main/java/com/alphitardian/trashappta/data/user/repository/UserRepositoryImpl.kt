@@ -17,4 +17,8 @@ class UserRepositoryImpl @Inject constructor(private val dataSource: UserDataSou
     override suspend fun getUserProfile(): ProfileResponse {
         return dataSource.getUserProfile()
     }
+
+    override suspend fun updateUserProfile(profileRequest: ProfileRequest): ProfileResponse {
+        return dataSource.updateUserProfile(profileRequest)
+    }
 }

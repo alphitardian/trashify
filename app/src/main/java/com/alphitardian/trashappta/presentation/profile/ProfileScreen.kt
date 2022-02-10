@@ -1,13 +1,16 @@
 package com.alphitardian.trashappta.presentation.profile
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -18,9 +21,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.alphitardian.trashappta.R
-import com.alphitardian.trashappta.data.user.remote.response.ProfileResponse
-import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
 import com.alphitardian.trashappta.utils.Resource
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.fade
@@ -28,7 +30,11 @@ import com.google.accompanist.placeholder.material.placeholder
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel? = null) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel? = null,
+    navigateBack: () -> Unit = {},
+    navigateToUpdateProfile: () -> Unit = {},
+) {
     val scaffoldState = rememberScaffoldState()
     val profile = viewModel?.profile?.observeAsState()
 
@@ -36,7 +42,7 @@ fun ProfileScreen(viewModel: ProfileViewModel? = null) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { HomeTopAppBar() },
+        topBar = { ProfileTopBar(navigateBack = navigateBack) },
         content = {
             when (val value = profile?.value) {
                 is Resource.Success -> {
@@ -44,7 +50,8 @@ fun ProfileScreen(viewModel: ProfileViewModel? = null) {
                         name = value.data.data.name,
                         email = value.data.data.email,
                         wasteCollected = value.data.data.wasteCollected,
-                        isLoading = false
+                        isLoading = false,
+                        navigateToUpdateProfile = navigateToUpdateProfile
                     )
                 }
                 is Resource.Loading -> {
@@ -55,8 +62,27 @@ fun ProfileScreen(viewModel: ProfileViewModel? = null) {
                         isLoading = true
                     )
                 }
+                else -> Unit
             }
         }
+    )
+}
+
+@Composable
+fun ProfileTopBar(navigateBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "Profile") },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     )
 }
 
@@ -66,9 +92,10 @@ fun ProfileContent(
     email: String,
     wasteCollected: String,
     isLoading: Boolean,
+    navigateToUpdateProfile: () -> Unit = {},
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (profileImageRef, nameRef, emailRef, wasteDescRef, wasteCollectedRef) = createRefs()
+        val (profileImageRef, nameRef, emailRef, wasteDescRef, wasteCollectedRef, updateButtonRef) = createRefs()
 
         Card(
             modifier = Modifier
@@ -166,6 +193,22 @@ fun ProfileContent(
                     color = Color.LightGray
                 ),
         )
+
+        Button(
+            onClick = navigateToUpdateProfile,
+            shape = RoundedCornerShape(28.dp),
+            modifier = Modifier
+                .height(52.dp)
+                .fillMaxWidth()
+                .constrainAs(updateButtonRef) {
+                    start.linkTo(parent.start, margin = 20.dp)
+                    end.linkTo(parent.end, margin = 20.dp)
+                    bottom.linkTo(parent.bottom, margin = 12.dp)
+                    width = Dimension.preferredWrapContent
+                }
+        ) {
+            Text(text = "Update Profile")
+        }
     }
 }
 

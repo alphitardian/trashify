@@ -23,6 +23,7 @@ import com.alphitardian.trashappta.presentation.navigation.graph.historyGraph
 import com.alphitardian.trashappta.presentation.navigation.graph.quizGraph
 import com.alphitardian.trashappta.presentation.profile.ProfileScreen
 import com.alphitardian.trashappta.presentation.profile.ProfileViewModel
+import com.alphitardian.trashappta.presentation.profile.UpdateProfileScreen
 import com.alphitardian.trashappta.presentation.quiz.QuizViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -80,12 +81,23 @@ fun AppNavigation(startDestination: String) {
         }
         composable(route = Destination.DETECTION.name) {
             val detectionViewModel = hiltViewModel<DetectionViewModel>()
-            DetectionScreen(detectionViewModel)
+            DetectionScreen(
+                viewModel = detectionViewModel,
+                navigateBack = { navController.navigateUp() }
+            )
         }
         composable(route = Destination.PROFILE.name) {
             val profileViewModel = hiltViewModel<ProfileViewModel>()
             ProfileScreen(
-                viewModel = profileViewModel
+                viewModel = profileViewModel,
+                navigateBack = { navController.navigateUp() },
+                navigateToUpdateProfile = { navController.navigate(Destination.UPDATE_PROFILE.name) }
+            )
+        }
+        composable(route = Destination.UPDATE_PROFILE.name) {
+            val profileViewModel = hiltViewModel<ProfileViewModel>()
+            UpdateProfileScreen(
+                navigateBack = { navController.navigateUp() }
             )
         }
         composable(route = Destination.BANK.name) {

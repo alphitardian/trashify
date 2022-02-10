@@ -108,6 +108,7 @@ fun LoginScreen(
             is Resource.Loading -> {
                 LoadingIndicator()
             }
+            else -> Unit
         }
     }
 }

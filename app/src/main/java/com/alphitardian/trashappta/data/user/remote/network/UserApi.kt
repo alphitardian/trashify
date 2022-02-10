@@ -4,6 +4,7 @@ import com.alphitardian.trashappta.data.user.remote.response.*
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface UserApi {
     @POST("auth/register")
@@ -17,4 +18,7 @@ interface UserApi {
 
     @POST("auth/refresh")
     suspend fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): LoginResponse
+
+    @PUT("user")
+    suspend fun updateUserProfile(@Body profileRequest: ProfileRequest): ProfileResponse
 }

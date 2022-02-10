@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -45,7 +47,7 @@ fun QuizScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { HomeTopAppBar() },
+        topBar = { QuizTopBar(navigateBack = navigateBack) },
         content = {
             when (val value = quiz?.value) {
                 is Resource.Success -> QuizSession(viewModel, value.data, navigateToResult)
@@ -57,6 +59,24 @@ fun QuizScreen(
         viewModel?.quizTimer?.cancel()
         navigateBack()
     }
+}
+
+@Composable
+fun QuizTopBar(navigateBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "Quiz") },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    )
 }
 
 @Composable

@@ -12,5 +12,6 @@ enum class Destination {
     MAPS,
     HISTORY,
     PROFILE,
-    BANK
+    BANK,
+    UPDATE_PROFILE,
 }

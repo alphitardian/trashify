@@ -33,7 +33,8 @@ fun NavGraphBuilder.historyGraph(navController: NavController) {
                 navigateToDetail = {
                     val json = Uri.encode(Json.encodeToString(it))
                     navController.navigate("${Destination.MAPS.name}/$json")
-                }
+                },
+                navigateBack = { navController.navigateUp() }
             )
         }
         composable(

@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,7 +46,10 @@ import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
-fun DetectionScreen(viewModel: DetectionViewModel? = null) {
+fun DetectionScreen(
+    viewModel: DetectionViewModel? = null,
+    navigateBack: () -> Unit = {},
+) {
     val detection = viewModel?.detection?.observeAsState()
     val image = viewModel?.image?.observeAsState()
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -52,6 +58,7 @@ fun DetectionScreen(viewModel: DetectionViewModel? = null) {
     LaunchedEffect(key1 = image?.value, block = {
         when (image?.value) {
             is Resource.Success -> scaffoldState.bottomSheetState.expand()
+            else -> Unit
         }
     })
 
@@ -71,15 +78,15 @@ fun DetectionScreen(viewModel: DetectionViewModel? = null) {
                             viewModel = viewModel
                         )
                     }
+                    else -> Unit
                 }
             },
-            topBar = { HomeTopAppBar() },
+            topBar = { DetectionAppBar(navigateBack = navigateBack)},
             content = { DetectionContent(viewModel) }
         )
         when (detection?.value) {
-            is Resource.Loading -> {
-                LoadingIndicator()
-            }
+            is Resource.Loading -> LoadingIndicator()
+            else -> Unit
         }
     }
 }
@@ -295,6 +302,24 @@ private fun convertToBase64(uri: Uri, context: Context): String? {
     selectedImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val byte = baos.toByteArray()
     return Base64.getEncoder().encodeToString(byte)
+}
+
+@Composable
+fun DetectionAppBar(navigateBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "Detection") },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
+    )
 }
 
 @ExperimentalMaterialApi

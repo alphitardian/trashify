@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +39,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun HistoryScreen(
     viewModel: HistoryViewModel? = null,
     navigateToDetail: (WasteHistoryResponse) -> Unit = {},
+    navigateBack: () -> Unit = {},
 ) {
     val scaffoldState = rememberScaffoldState()
     val waste = viewModel?.wasteHistory?.observeAsState()
@@ -46,7 +49,7 @@ fun HistoryScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { HomeTopAppBar() },
+        topBar = { HistoryTopBar(navigateBack = navigateBack) },
         content = {
             isRefresh?.let {
                 SwipeRefresh(
@@ -98,6 +101,24 @@ fun HistoryScreen(
                 }
             }
         }
+    )
+}
+
+@Composable
+fun HistoryTopBar(navigateBack: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "History") },
+        navigationIcon = {
+            IconButton(onClick = navigateBack) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     )
 }
 
