@@ -1,5 +1,7 @@
 package com.alphitardian.trashappta.di
 
+import com.alphitardian.trashappta.data.image.local.ImageLocalDataSource
+import com.alphitardian.trashappta.data.image.local.ImageLocalDataSourceImpl
 import com.alphitardian.trashappta.data.image.remote.ImageDataSource
 import com.alphitardian.trashappta.data.image.remote.ImageDataSourceImpl
 import com.alphitardian.trashappta.data.maps.MapsDataSource
@@ -31,5 +33,8 @@ abstract class DataSourceModule {
     abstract fun bindMapsDataSource(mapsDataSource: MapsDataSourceImpl): MapsDataSource
 
     @Binds
-    abstract fun bindImageDataSource(imageDataSource: ImageDataSourceImpl): ImageDataSource
+    abstract fun bindImageRemoteDataSource(imageDataSource: ImageDataSourceImpl): ImageDataSource
+
+    @Binds
+    abstract fun bindImageLocalDataSource(imageDataSource: ImageLocalDataSourceImpl): ImageLocalDataSource
 }

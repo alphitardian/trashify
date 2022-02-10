@@ -97,6 +97,7 @@ fun AppNavigation(startDestination: String) {
         composable(route = Destination.UPDATE_PROFILE.name) {
             val profileViewModel = hiltViewModel<ProfileViewModel>()
             UpdateProfileScreen(
+                viewModel = profileViewModel,
                 navigateBack = { navController.navigateUp() }
             )
         }

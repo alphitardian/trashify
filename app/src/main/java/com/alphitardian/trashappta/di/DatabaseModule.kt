@@ -3,6 +3,7 @@ package com.alphitardian.trashappta.di
 import android.content.Context
 import androidx.room.Room
 import com.alphitardian.trashappta.data.database.TrashDatabase
+import com.alphitardian.trashappta.data.image.local.dao.ImageDao
 import com.alphitardian.trashappta.data.waste.local.dao.WasteDao
 import dagger.Module
 import dagger.Provides
@@ -27,4 +28,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideWasteDao(database: TrashDatabase): WasteDao = database.wasteDao()
+
+    @Provides
+    @Singleton
+    fun provideImageDao(database: TrashDatabase): ImageDao = database.imageDao()
 }
