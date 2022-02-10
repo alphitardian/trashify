@@ -36,11 +36,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @ExperimentalPermissionsApi
 @ExperimentalMaterialApi
 @Composable
-fun AppNavigation() {
+fun AppNavigation(startDestination: String) {
     val navController = rememberAnimatedNavController()
     val quizViewModel = hiltViewModel<QuizViewModel>()
 
-    AnimatedNavHost(navController = navController, startDestination = "AUTH_GRAPH") {
+    AnimatedNavHost(navController = navController, startDestination = startDestination) {
         composable(
             route = Destination.HOME.name,
             enterTransition = {
