@@ -28,6 +28,12 @@ class LoginViewModel @Inject constructor(
     private var _login: MutableLiveData<Resource<LoginResponse>> = MutableLiveData()
     val login: LiveData<Resource<LoginResponse>> get() = _login
 
+    init {
+        viewModelScope.launch {
+            datastore.clear()
+        }
+    }
+
     fun loginAccount() {
         viewModelScope.launch {
             runCatching {

@@ -113,7 +113,7 @@ fun DetectionContent(
     LaunchedEffect(key1 = Unit) { viewModel?.getCurrentLocation() }
 
     val localModel = LocalModel.Builder()
-        .setAssetFilePath("model.tflite")
+        .setAssetFilePath("model_1.tflite")
         .build()
 
     val pickPhotoLauncher =

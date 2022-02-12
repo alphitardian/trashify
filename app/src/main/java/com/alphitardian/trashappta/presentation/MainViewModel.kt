@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
         }
     }
 
-    fun getUserProfile() {
+    private fun getUserProfile() {
         viewModelScope.launch {
             runCatching {
                 _profile.value = Resource.Loading()

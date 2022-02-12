@@ -85,7 +85,7 @@ class DetectionViewModel @Inject constructor(
                     val confidence = label.confidence
 
                     result.value = "$text $confidence"
-                    println("result " + result.value)
+                    println("result " + labels)
                     _detection.value = Resource.Success(true)
                 }
                 .addOnFailureListener {
@@ -155,8 +155,9 @@ class DetectionViewModel @Inject constructor(
     fun extractWasteType(): String {
         return when (result.value.split(" ")[0]) {
             "O" -> "Organic"
-            "N" -> "Non-Organic"
+            "N" -> "No-or"
             "R" -> "Recyclable"
+            "P" -> "Poison"
             else -> ""
         }
 

@@ -16,7 +16,9 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.HttpException
 import retrofit2.Retrofit
+import java.io.IOException
 import javax.inject.Inject
 
 class UserInterceptor @Inject constructor(
@@ -38,14 +40,18 @@ class UserInterceptor @Inject constructor(
                     val errorResponse = initialResponse.body?.string()
                     val jsonResponse = Json.decodeFromString<AuthErrorResponse>(errorResponse.toString())
                     if (jsonResponse.message == "Token expired") {
-                        initialResponse.close()
-                        val tokenResponse = runBlocking { getNewToken() }
-                        datastoreTransaction(tokenResponse)
-                        val newRequest = originalRequest.newBuilder()
-                            .addHeader("Authorization", tokenResponse.data.accessToken)
-                            .build()
+                        try {
+                            initialResponse.close()
+                            val tokenResponse = runBlocking { getNewToken() }
+                            datastoreTransaction(tokenResponse)
+                            val newRequest = originalRequest.newBuilder()
+                                .addHeader("Authorization", tokenResponse.data.accessToken)
+                                .build()
 
-                        return chain.proceed(newRequest)
+                            return chain.proceed(newRequest)
+                        } catch (e: Throwable) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             }
