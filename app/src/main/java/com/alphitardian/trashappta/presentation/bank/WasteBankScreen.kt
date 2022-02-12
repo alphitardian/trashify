@@ -3,10 +3,6 @@ package com.alphitardian.trashappta.presentation.bank
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.alphitardian.trashappta.BuildConfig
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.presentation.history.components.rememberMapViewWithLifecycle
-import com.alphitardian.trashappta.presentation.home.HomeTopAppBar
 import com.alphitardian.trashappta.utils.Resource
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -42,7 +40,6 @@ import com.google.android.libraries.maps.model.LatLng
 import com.google.android.libraries.maps.model.MarkerOptions
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.model.PlacesSearchResult
-import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
@@ -63,6 +60,10 @@ fun WasteBankScreen(
     val currentLocation = viewModel?.location?.observeAsState()
     val nearbyPlace = viewModel?.nearbyPlace?.observeAsState()
     var placeDataResults by remember { mutableStateOf<List<PlacesSearchResult>>(listOf()) }
+    var openDialog by remember { mutableStateOf(true) }
+
+    val lottieComposition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.question_mark))
+    val progress by animateLottieCompositionAsState(composition = lottieComposition)
 
     LaunchedEffect(key1 = currentLocation?.value) {
         when (currentLocation?.value) {
@@ -82,7 +83,7 @@ fun WasteBankScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = {  },
+        topBar = { },
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
@@ -99,10 +100,16 @@ fun WasteBankScreen(
                                 if (placeDataResults.isNotEmpty()) {
                                     map.clear()
 
-                                    val latlngValue = placeDataResults[pagerState.currentPage].geometry.location
+                                    val latlngValue =
+                                        placeDataResults[pagerState.currentPage].geometry.location
                                     val position = LatLng(latlngValue.lat, latlngValue.lng)
 
-                                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 18f))
+                                    map.animateCamera(
+                                        CameraUpdateFactory.newLatLngZoom(
+                                            position,
+                                            18f
+                                        )
+                                    )
                                     val markerOptions = MarkerOptions().position(position)
                                     map.addMarker(markerOptions)
                                 }
@@ -124,7 +131,10 @@ fun WasteBankScreen(
                             navigateToMaps = {
                                 val latitude = placeDataResults[index].geometry.location.lat
                                 val longitude = placeDataResults[index].geometry.location.lng
-                                val query = URLEncoder.encode(placeDataResults[index].name.orEmpty(), "utf-8")
+                                val query = URLEncoder.encode(
+                                    placeDataResults[index].name.orEmpty(),
+                                    "utf-8"
+                                )
                                 navigateToMaps(latitude, longitude, query)
                             }
                         )
@@ -159,6 +169,52 @@ fun WasteBankScreen(
                         contentDescription = null
                     )
                 }
+                FloatingActionButton(
+                    onClick = { openDialog = !openDialog },
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .align(Alignment.TopEnd),
+                    backgroundColor = Color.White
+                ) {
+                    Text(
+                        text = "?",
+                        style = MaterialTheme.typography.h5
+                    )
+                }
+            }
+
+            if (openDialog) {
+                AlertDialog(
+                    onDismissRequest = { openDialog = !openDialog },
+                    title = {
+                        LottieAnimation(
+                            composition = lottieComposition,
+                            progress = progress,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(150.dp)
+                        )
+                    },
+                    text = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = "Bank Sampah",
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(text = "Bank sampah adalah suatu tempat yang digunakan untuk mengumpulkan sampah yang sudah dipilah-pilah. Hasil dari pengumpulan sampah yang sudah dipilah akan disetorkan ke tempat pembuatan kerajinan dari sampah atau ke tempat Pengepul sampah. Bank sampah dikelola menggunakan sistem seperti perbankkan yang dilakukan oleh petugas sukarelawan.")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { openDialog = !openDialog }) {
+                            Text(text = "OK")
+                        }
+                    },
+                    shape = RoundedCornerShape(16.dp)
+                )
             }
         }
     )
