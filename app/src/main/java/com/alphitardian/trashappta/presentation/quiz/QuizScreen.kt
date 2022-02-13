@@ -114,7 +114,7 @@ fun QuizContent(viewModel: QuizViewModel?) {
             }
         )
         Button(
-            onClick = { viewModel?.getAllQuiz() },
+            onClick = { viewModel?.getRandomQuiz() },
             shape = RoundedCornerShape(28.dp),
             modifier = Modifier
                 .height(52.dp)
@@ -170,17 +170,19 @@ fun QuizSession(
 
             Card(
                 modifier = Modifier
+                    .padding(20.dp)
                     .fillMaxWidth()
                     .height(300.dp)
                     .constrainAs(imageRef) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                    }
+                        start.linkTo(parent.start, margin = 20.dp)
+                        top.linkTo(parent.top, margin = 20.dp)
+                        end.linkTo(parent.end, margin = 20.dp)
+                    },
+                shape = RoundedCornerShape(16.dp)
             ) {
                 GlideImage(
                     imageModel = quizResponse.data[viewModel.quizItemCount.value].imageUrl,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     previewPlaceholder = R.drawable.placeholder_image,
                     error = painterResource(id = R.drawable.placeholder_image)
                 )
@@ -199,7 +201,7 @@ fun QuizSession(
                 modifier = Modifier.constrainAs(answerRef) {
                     start.linkTo(parent.start, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                    top.linkTo(questionRef.bottom, margin = 10.dp)
+                    top.linkTo(questionRef.bottom, margin = 20.dp)
                 }
             ) {
                 quizResponse.data[viewModel.quizItemCount.value].choices.forEachIndexed { index, choiceResponse ->
@@ -215,9 +217,7 @@ fun QuizSession(
                                 width = if (selectedAnswer.value == index) 2.dp else (-1).dp,
                                 color = Color.Green,
                             )
-                            .clip(
-                                shape = RoundedCornerShape(8.dp),
-                            )
+                            .clip(shape = RoundedCornerShape(8.dp),)
                             .background(
                                 if (selectedAnswer.value == index) Color.Green.copy(0.3f)
                                 else Color.LightGray
@@ -231,11 +231,29 @@ fun QuizSession(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_delete_outline_24),
-                                contentDescription = null,
-                                modifier = Modifier.size(81.dp),
+                            val image = when (choiceResponse.title) {
+                                "Poison" -> R.raw.warning_sign
+                                "Organic" -> R.raw.bouncing_fruits
+                                "Non-Organic" -> R.raw.compact_plastic_bottle
+                                "Recyclable" -> R.raw.paper_notes
+                                "Yes" -> R.raw.tick_green
+                                "No" -> R.raw.cross_animation
+                                else -> R.raw.paper_notes
+                            }
+                            val lottieComposition by rememberLottieComposition(
+                                spec = LottieCompositionSpec.RawRes(
+                                    image
+                                )
+                            )
+                            val progress by animateLottieCompositionAsState(
+                                composition = lottieComposition,
+                                iterations = LottieConstants.IterateForever
+                            )
 
+                            LottieAnimation(
+                                composition = lottieComposition,
+                                progress = progress,
+                                modifier = Modifier.size(81.dp)
                             )
                             Text(text = choiceResponse.title)
                         }

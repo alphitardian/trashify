@@ -8,4 +8,8 @@ class QuizRemoteDataSource @Inject constructor(private val quizApi: QuizApi): Qu
     override suspend fun getAllQuiz(): QuizResponse {
         return quizApi.getAllQuiz()
     }
+
+    override suspend fun getRandomQuiz(): QuizResponse {
+        return quizApi.getRandomQuiz()
+    }
 }

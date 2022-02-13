@@ -25,6 +25,7 @@ import com.alphitardian.trashappta.presentation.profile.ProfileScreen
 import com.alphitardian.trashappta.presentation.profile.ProfileViewModel
 import com.alphitardian.trashappta.presentation.profile.UpdateProfileScreen
 import com.alphitardian.trashappta.presentation.quiz.QuizViewModel
+import com.alphitardian.trashappta.presentation.solution.SolutionScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

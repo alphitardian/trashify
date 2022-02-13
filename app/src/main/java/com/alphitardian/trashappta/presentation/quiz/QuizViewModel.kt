@@ -4,7 +4,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.os.CountDownTimer
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -64,13 +63,16 @@ class QuizViewModel @Inject constructor(private val quizRepository: QuizReposito
         mediaPlayer.value = null
     }
 
-    fun getAllQuiz() {
+    fun getRandomQuiz() {
         viewModelScope.launch {
             runCatching {
                 _quiz.value = Resource.Loading()
-                val response = quizRepository.getAllQuiz()
+                val response = quizRepository.getRandomQuiz()
                 _quiz.value = Resource.Success(response)
-            }.getOrElse { it.printStackTrace() }
+            }.getOrElse {
+                it.printStackTrace()
+                _quiz.value = Resource.Error(it)
+            }
         }
     }
 

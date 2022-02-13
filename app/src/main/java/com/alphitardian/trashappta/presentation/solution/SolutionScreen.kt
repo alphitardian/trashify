@@ -43,7 +43,6 @@ fun SolutionScreen(
     viewModel: DetectionViewModel? = null,
     closeSheet: () -> Unit = {},
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val waste = viewModel?.waste?.observeAsState()
     val uploadImage = viewModel?.image?.observeAsState()
@@ -104,6 +103,7 @@ fun SolutionScreen(
             .fillMaxSize(),
     ) {
         val (imageRef, titleRef, descRef, backButtonRef, loadingRef, pageTitleRef, solutionSectionRef, solutionRef) = createRefs()
+        val wasteType = viewModel?.extractWasteType().orEmpty()
 
         if (waste?.value is Resource.Loading) {
             CircularProgressIndicator(
@@ -153,16 +153,22 @@ fun SolutionScreen(
                 ),
             shape = RoundedCornerShape(16.dp)
         ) {
+            val image = when (wasteType) {
+                "Organic" -> R.drawable.organic_waste
+                "No-or" -> R.drawable.non_organic_waste
+                "Poison" -> R.drawable.poison_waste
+                "Recyclable" -> R.drawable.recyclable_waste
+                else -> R.drawable.placeholder_image
+            }
             Image(
-                painter = painterResource(id = R.drawable.organic_waste),
+                painter = painterResource(id = image),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
             )
         }
 
-        val text = viewModel?.extractWasteType().orEmpty()
         Text(
-            text = text,
+            text = wasteType,
             style = MaterialTheme.typography.h4,
             textAlign = TextAlign.Start,
             modifier = Modifier

@@ -9,4 +9,8 @@ class QuizRepositoryImpl @Inject constructor(private val quizDataSource: QuizDat
     override suspend fun getAllQuiz(): QuizResponse {
         return quizDataSource.getAllQuiz()
     }
+
+    override suspend fun getRandomQuiz(): QuizResponse {
+        return quizDataSource.getRandomQuiz()
+    }
 }

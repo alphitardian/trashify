@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alphitardian.trashappta.data.waste.remote.response.WasteDataResponse
 import com.alphitardian.trashappta.data.waste.remote.response.WasteHistoryResponse
 import com.alphitardian.trashappta.data.waste.remote.response.WasteResponse
 import com.alphitardian.trashappta.domain.repository.MapsRepository
@@ -15,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +33,10 @@ class HistoryViewModel @Inject constructor(
 
     private val _place: MutableLiveData<Resource<Place>> = MutableLiveData()
     val place: LiveData<Resource<Place>> get() = _place
+
+    private var _waste: MutableLiveData<Resource<WasteResponse<WasteDataResponse>>> =
+        MutableLiveData()
+    val waste: LiveData<Resource<WasteResponse<WasteDataResponse>>> get() = _waste
 
     private val _isRefresh = MutableStateFlow(false)
     val isRefresh: StateFlow<Boolean> get() = _isRefresh
@@ -72,6 +78,19 @@ class HistoryViewModel @Inject constructor(
             }.getOrElse {
                 it.printStackTrace()
                 _place.value = Resource.Error(it)
+            }
+        }
+    }
+
+    fun getWasteByAlias(alias: String) {
+        viewModelScope.launch {
+            runCatching {
+                _waste.value = Resource.Loading()
+                val response = wasteRepository.getWasteByAlias(alias.lowercase(Locale.getDefault()))
+                _waste.value = Resource.Success(response)
+            }.getOrElse {
+                it.printStackTrace()
+                _waste.value = Resource.Error(it)
             }
         }
     }

@@ -6,10 +6,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.alphitardian.trashappta.R
 import com.alphitardian.trashappta.data.waste.remote.response.WasteHistoryResponse
+import com.alphitardian.trashappta.presentation.solution.SolutionDialog
 import com.alphitardian.trashappta.utils.Resource
 import com.alphitardian.trashappta.utils.formatDate
 import com.google.android.libraries.places.api.model.Place
@@ -54,9 +54,20 @@ fun HistoryDetailScreen(
     val scaffoldState = rememberBottomSheetScaffoldState()
     val placeId = viewModel?.placeId?.observeAsState()
     val placeDetail = viewModel?.place?.observeAsState()
+    val wasteDetail = viewModel?.waste?.observeAsState()
     val context = LocalContext.current
+    val isDialogOpen = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = Unit) { waste?.let { viewModel?.getPlaceId(it.latitude, it.longitude) } }
+    LaunchedEffect(key1 = Unit) {
+        waste?.let {
+            viewModel?.getPlaceId(it.latitude, it.longitude)
+            val alias = when (it.waste.name) {
+                "Non-Organic" -> "no-or"
+                else -> it.waste.name.lowercase()
+            }
+            viewModel?.getWasteByAlias(alias)
+        }
+    }
 
     LaunchedEffect(key1 = placeId?.value) {
         when (val value = placeId?.value) {
@@ -74,7 +85,11 @@ fun HistoryDetailScreen(
         scaffoldState = scaffoldState,
         sheetContent = {
             when (val value = placeDetail?.value) {
-                is Resource.Success -> FrontLayerContent(waste = waste, placeDetail = value.data)
+                is Resource.Success -> FrontLayerContent(
+                    waste = waste,
+                    placeDetail = value.data,
+                    isDialogOpen = isDialogOpen
+                )
                 is Resource.Loading -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -122,6 +137,17 @@ fun HistoryDetailScreen(
                     )
                 }
             }
+
+            if (isDialogOpen.value) {
+                when (val value = wasteDetail?.value) {
+                    is Resource.Success -> SolutionDialog(
+                        isDialogOpen = isDialogOpen,
+                        waste = value.data.data,
+                        wasteType = value.data.data?.name.orEmpty()
+                    )
+                    else -> Unit
+                }
+            }
         }
     )
 }
@@ -130,13 +156,14 @@ fun HistoryDetailScreen(
 fun FrontLayerContent(
     waste: WasteHistoryResponse? = null,
     placeDetail: Place? = null,
+    isDialogOpen: MutableState<Boolean>? = null,
 ) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        val (placeNameRef, placeDetailRef, imageRef, wasteTypeRef, dateRef) = createRefs()
+        val (placeNameRef, placeDetailRef, imageRef, wasteTypeRef, dateRef, infoButtonRef) = createRefs()
 
         Text(
             text = placeDetail?.name.orEmpty(),
@@ -219,6 +246,19 @@ fun FrontLayerContent(
                     width = Dimension.preferredWrapContent
                 }
         )
+        IconButton(
+            onClick = { isDialogOpen?.value = !isDialogOpen?.value!! },
+            modifier = Modifier.constrainAs(infoButtonRef) {
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom, margin = 10.dp)
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+        }
     }
 }
 
