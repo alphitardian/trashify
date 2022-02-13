@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -250,7 +251,7 @@ fun MapCard(
         modifier = Modifier
             .padding(20.dp)
             .fillMaxWidth()
-            .height(150.dp),
+            .height(175.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 20.dp
     ) {
@@ -262,6 +263,8 @@ fun MapCard(
                 style = MaterialTheme.typography.h5,
                 fontWeight = FontWeight.W700,
                 textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(titleRef) {
@@ -287,7 +290,7 @@ fun MapCard(
             Icon(
                 imageVector = Icons.Default.Place,
                 contentDescription = null,
-                tint = Color.Green,
+                tint = Color(0xFF047C00),
                 modifier = Modifier
                     .size(42.dp)
                     .constrainAs(iconRef) {
@@ -297,11 +300,11 @@ fun MapCard(
             )
             OutlinedButton(
                 onClick = navigateToMaps,
-                border = BorderStroke(1.dp, Color.Green),
+                border = BorderStroke(1.dp, Color(0xFF047C00)),
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     backgroundColor = Color.White,
-                    contentColor = Color.Green
+                    contentColor = Color(0xFF047C00)
                 ),
                 modifier = Modifier.constrainAs(mapButtonRef) {
                     end.linkTo(parent.end, margin = 20.dp)
@@ -311,7 +314,7 @@ fun MapCard(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_map_24),
                     contentDescription = null,
-                    tint = Color.Green,
+                    tint = Color(0xFF047C00),
                     modifier = Modifier.padding(end = 8.dp)
                 )
                 Text(text = "Open In Maps")

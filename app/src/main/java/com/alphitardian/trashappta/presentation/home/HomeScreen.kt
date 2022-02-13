@@ -101,7 +101,7 @@ fun HomeContent(
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.White,
-                        Color(0xffffd285).copy(0.5f)
+                        Color(0xFF74D3FF).copy(0.5f)
                     )
                 )
             )
