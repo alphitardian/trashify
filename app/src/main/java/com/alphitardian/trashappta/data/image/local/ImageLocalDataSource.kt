@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ImageLocalDataSource {
     suspend fun insertImage(imageEntity: ImageEntity)
     fun getImage(id: String): Flow<ImageEntity>
+    suspend fun deleteImage(id: String)
 }

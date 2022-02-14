@@ -13,4 +13,8 @@ class ImageLocalDataSourceImpl @Inject constructor(private val imageDao: ImageDa
     override fun getImage(id: String): Flow<ImageEntity> {
         return imageDao.getImage(id)
     }
+
+    override suspend fun deleteImage(id: String) {
+        return imageDao.deleteImage(id)
+    }
 }

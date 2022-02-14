@@ -13,6 +13,7 @@ import com.alphitardian.trashappta.domain.repository.ImageRepository
 import com.alphitardian.trashappta.domain.repository.UserRepository
 import com.alphitardian.trashappta.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getUserProfile()
+        getImage()
     }
 
     fun getUserProfile() {
@@ -77,6 +79,7 @@ class ProfileViewModel @Inject constructor(
                     imageUrl = response.data.url
                 )
                 imageRepository.insertImage(entity)
+                getImage()
                 _image.value = Resource.Success(response)
             }.getOrElse {
                 it.printStackTrace()
@@ -85,11 +88,20 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    val getImage = imageRepository.getImage(userId.value)
+    fun getImage(): Flow<ImageEntity> {
+        return imageRepository.getImage(userId.value)
+    }
+
+    fun deleteImage() {
+        viewModelScope.launch {
+            imageRepository.deleteImage(userId.value)
+        }
+    }
 
     fun initiateValue(response: ProfileResponse) {
         userName.value = response.data.name
         userEmail.value = response.data.email
+        userId.value = response.data.id
     }
 
     fun setUserName(name: String) {

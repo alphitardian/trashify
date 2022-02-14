@@ -23,4 +23,8 @@ class ImageRepositoryImpl @Inject constructor(
     override suspend fun insertImage(imageEntity: ImageEntity) {
         localDataSource.insertImage(imageEntity)
     }
+
+    override suspend fun deleteImage(id: String) {
+        localDataSource.deleteImage(id)
+    }
 }

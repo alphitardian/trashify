@@ -14,4 +14,7 @@ interface ImageDao {
 
     @Query("SELECT * FROM image WHERE user_id = :id")
     fun getImage(id: String): Flow<ImageEntity>
+
+    @Query("DELETE FROM image WHERE user_id = :id")
+    suspend fun deleteImage(id: String)
 }

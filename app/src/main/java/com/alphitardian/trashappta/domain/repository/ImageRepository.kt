@@ -8,4 +8,5 @@ interface ImageRepository {
     suspend fun uploadImage(base64Data: String): ImageResponse
     fun getImage(userId: String): Flow<ImageEntity>
     suspend fun insertImage(imageEntity: ImageEntity)
+    suspend fun deleteImage(id: String)
 }

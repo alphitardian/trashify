@@ -1,6 +1,5 @@
 package com.alphitardian.trashappta.presentation.navigation
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -25,7 +24,6 @@ import com.alphitardian.trashappta.presentation.profile.ProfileScreen
 import com.alphitardian.trashappta.presentation.profile.ProfileViewModel
 import com.alphitardian.trashappta.presentation.profile.UpdateProfileScreen
 import com.alphitardian.trashappta.presentation.quiz.QuizViewModel
-import com.alphitardian.trashappta.presentation.solution.SolutionScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -92,7 +90,14 @@ fun AppNavigation(startDestination: String) {
             ProfileScreen(
                 viewModel = profileViewModel,
                 navigateBack = { navController.navigateUp() },
-                navigateToUpdateProfile = { navController.navigate(Destination.UPDATE_PROFILE.name) }
+                navigateToUpdateProfile = { navController.navigate(Destination.UPDATE_PROFILE.name) },
+                navigateToLogin = {
+                    navController.navigate("AUTH_GRAPH") {
+                        popUpTo(Destination.LOGIN.name) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
         composable(route = Destination.UPDATE_PROFILE.name) {

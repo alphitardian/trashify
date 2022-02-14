@@ -125,6 +125,7 @@ dependencies {
 
     // Image Loader
     implementation "com.github.skydoves:landscapist-glide:1.4.5"
+    implementation "io.coil-kt:coil-compose:1.4.0"
 
     // Datastore
     implementation "androidx.datastore:datastore:1.0.0"

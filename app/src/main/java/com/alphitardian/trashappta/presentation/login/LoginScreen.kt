@@ -1,7 +1,9 @@
 package com.alphitardian.trashappta.presentation.login
 
 import android.Manifest
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -97,7 +99,6 @@ fun LoginScreen(
         }
     })
 
-
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             scaffoldState = scaffoldState,
@@ -110,6 +111,10 @@ fun LoginScreen(
             }
             else -> Unit
         }
+    }
+
+    BackHandler {
+        (context as Activity).finish()
     }
 }
 
