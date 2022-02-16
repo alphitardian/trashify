@@ -209,10 +209,16 @@ fun QuizSession(
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .size(120.dp)
-                            .clickable {
-                                viewModel.tappedAnswerId.value = choiceResponse.id
-                                selectedAnswer.value = index
-                            }
+                            .clickable(
+                                onClick = {
+                                    viewModel.tappedAnswerId.value = choiceResponse.id
+                                    selectedAnswer.value = index
+                                    viewModel.quizTimer?.cancel()
+                                    isQuizRunning.value = false
+                                    viewModel.START_QUIZ_TIMER = 10
+                                },
+                                enabled = isQuizRunning.value
+                            )
                             .border(
                                 width = if (selectedAnswer.value == index) 2.dp else (-1).dp,
                                 color = Color.Green,
