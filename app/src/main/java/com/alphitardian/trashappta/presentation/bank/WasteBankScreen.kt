@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -129,6 +130,7 @@ fun WasteBankScreen(
                         MapCard(
                             title = placeDataResults[index].name.orEmpty(),
                             description = placeDataResults[index].vicinity.orEmpty(),
+                            rating = placeDataResults[index].rating,
                             navigateToMaps = {
                                 val latitude = placeDataResults[index].geometry.location.lat
                                 val longitude = placeDataResults[index].geometry.location.lng
@@ -245,6 +247,7 @@ fun LoadingSkeleton(modifier: Modifier = Modifier) {
 fun MapCard(
     title: String = "",
     description: String = "",
+    rating: Float = 0.0f,
     navigateToMaps: () -> Unit = {},
 ) {
     Card(
@@ -256,7 +259,7 @@ fun MapCard(
         elevation = 20.dp
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-            val (titleRef, descriptionRef, iconRef, mapButtonRef) = createRefs()
+            val (titleRef, descriptionRef, iconRef, ratingRef, mapButtonRef) = createRefs()
 
             Text(
                 text = title,
@@ -298,6 +301,25 @@ fun MapCard(
                         top.linkTo(parent.top, margin = 20.dp)
                     }
             )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.constrainAs(ratingRef) {
+                    start.linkTo(iconRef.end, margin = 6.dp)
+                    top.linkTo(descriptionRef.bottom, margin = 4.dp)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = Color(0xFFFFAF23),
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+                Text(
+                    text = rating.toString(),
+                    style = MaterialTheme.typography.body2,
+                    color = Color.Gray
+                )
+            }
             OutlinedButton(
                 onClick = navigateToMaps,
                 border = BorderStroke(1.dp, Color(0xFF047C00)),
