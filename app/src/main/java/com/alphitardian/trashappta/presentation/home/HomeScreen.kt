@@ -166,7 +166,7 @@ fun HomeContent(
                     top.linkTo(subtitleRef.bottom, margin = 28.dp)
                     end.linkTo(parent.end, margin = 20.dp)
                 },
-            lottieModifier = Modifier.size(120.dp)
+//            lottieModifier = Modifier.size(120.dp)
         )
 
         HomeMenuButton(
@@ -194,7 +194,7 @@ fun HomeContent(
                     top.linkTo(quizButtonRef.bottom, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
                 },
-            lottieModifier = Modifier.size(120.dp)
+//            lottieModifier = Modifier.size(120.dp)
         )
 
         HomeMenuButton(
@@ -209,6 +209,7 @@ fun HomeContent(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(historyButtonRef.bottom, margin = 20.dp)
+                    bottom.linkTo(parent.bottom, margin = 16.dp)
                 }
         )
     }
@@ -233,23 +234,27 @@ fun HomeMenuButton(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .size(170.dp, 200.dp)
+            .fillMaxWidth(fraction = 0.425f)
+            .fillMaxHeight(fraction = 0.25f)
             .background(backgroundColor)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             LottieAnimation(
                 composition = lottieComposition,
                 progress = progress,
-                modifier = lottieModifier.size(100.dp)
+                modifier = lottieModifier.weight(0.2f)
             )
             Text(
                 text = text,
                 style = MaterialTheme.typography.h6,
                 color = textColor,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(0.1f)
             )
         }
     }
