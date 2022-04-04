@@ -75,11 +75,13 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
             progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
                 .constrainAs(imageRef) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
+                    bottom.linkTo(greetingRef.top, margin = 12.dp)
+                    width = Dimension.preferredWrapContent
+                    height = Dimension.fillToConstraints
                 }
         )
 
@@ -89,7 +91,7 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
             modifier = Modifier.constrainAs(greetingRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(imageRef.bottom, margin = 12.dp)
+                bottom.linkTo(greetingDescRef.top, margin = 6.dp)
             }
         )
         Text(
@@ -97,7 +99,7 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
             modifier = Modifier.constrainAs(greetingDescRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(greetingRef.bottom, margin = 6.dp)
+                bottom.linkTo(nameFieldRef.top, margin = 20.dp)
             }
         )
 
@@ -112,7 +114,7 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
                 .constrainAs(nameFieldRef) {
                     start.linkTo(parent.start, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                    top.linkTo(greetingDescRef.bottom, margin = 20.dp)
+                    bottom.linkTo(emailFieldRef.top, margin = 8.dp)
                     width = Dimension.preferredWrapContent
                 }
         )
@@ -127,7 +129,7 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
                 .constrainAs(emailFieldRef) {
                     start.linkTo(parent.start, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                    top.linkTo(nameFieldRef.bottom, margin = 8.dp)
+                    bottom.linkTo(passwordFieldRef.top, margin = 8.dp)
                     width = Dimension.preferredWrapContent
 
                 }
@@ -144,7 +146,7 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
                 .constrainAs(passwordFieldRef) {
                     start.linkTo(parent.start, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
-                    top.linkTo(emailFieldRef.bottom, margin = 8.dp)
+                    bottom.linkTo(registerButtonRef.top, margin = 20.dp)
                     width = Dimension.preferredWrapContent
                 }
         )
