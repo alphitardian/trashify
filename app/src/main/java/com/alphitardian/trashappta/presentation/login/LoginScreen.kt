@@ -4,10 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -141,11 +138,13 @@ fun LoginContent(
             progress = progress,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
                 .constrainAs(imageRef) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
+                    bottom.linkTo(greetingRef.top, margin = 12.dp)
+                    width = Dimension.preferredWrapContent
+                    height = Dimension.fillToConstraints
                 }
         )
 
@@ -155,7 +154,7 @@ fun LoginContent(
             modifier = Modifier.constrainAs(greetingRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(imageRef.bottom, margin = 12.dp)
+                bottom.linkTo(greetingDescRef.top, margin = 12.dp)
             }
         )
         Text(
@@ -163,7 +162,7 @@ fun LoginContent(
             modifier = Modifier.constrainAs(greetingDescRef) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                top.linkTo(greetingRef.bottom, margin = 6.dp)
+                bottom.linkTo(emailFieldRef.top, margin = 6.dp)
             }
         )
 
@@ -208,6 +207,7 @@ fun LoginContent(
                     start.linkTo(parent.start, margin = 20.dp)
                     end.linkTo(parent.end, margin = 20.dp)
                     top.linkTo(emailFieldRef.bottom, margin = 10.dp)
+                    bottom.linkTo(loginButtonRef.top, margin = 20.dp)
                     width = Dimension.preferredWrapContent
                 }
         )
