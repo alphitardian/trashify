@@ -52,6 +52,7 @@ fun ProfileScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val profile = viewModel?.profile?.observeAsState()
+    val isDialogOpen = remember { mutableStateOf(false) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -66,8 +67,34 @@ fun ProfileScreen(
                         isLoading = false,
                         viewModel = viewModel,
                         navigateToUpdateProfile = navigateToUpdateProfile,
-                        navigateToLogin = navigateToLogin
+                        navigateToLogin = {
+                            isDialogOpen.value = true
+                            println(isDialogOpen.value)
+                        }
                     )
+
+                    if (isDialogOpen.value) {
+                        AlertDialog(
+                            onDismissRequest = { isDialogOpen.value = false },
+                            title = { Text(text = "Are you sure?") },
+                            text = { Text(text = "Confirm if you really want to logout") },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        viewModel.deleteImage()
+                                        navigateToLogin()
+                                    }
+                                ) {
+                                    Text(text = "Logout")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { isDialogOpen.value = false }) {
+                                    Text(text = "Cancel")
+                                }
+                            }
+                        )
+                    }
                 }
                 is Resource.Loading -> {
                     ProfileContent(
@@ -113,7 +140,6 @@ fun ProfileContent(
 ) {
     val context = LocalContext.current
     val images = viewModel?.getImage()?.collectAsState(initial = null)
-    val imageUrl = remember { mutableStateOf<Any?>(null) }
     val pickPhotoLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) {
             if (it != null) {
@@ -247,10 +273,7 @@ fun ProfileContent(
         }
 
         TextButton(
-            onClick = {
-                viewModel?.deleteImage()
-                navigateToLogin()
-            },
+            onClick = navigateToLogin,
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(logoutButtonRef) {
