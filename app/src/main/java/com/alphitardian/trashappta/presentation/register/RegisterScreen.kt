@@ -1,5 +1,6 @@
 package com.alphitardian.trashappta.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -27,12 +30,16 @@ fun RegisterScreen(
     viewModel: RegisterViewModel? = null,
     navigateToLogin: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val register = viewModel?.register?.observeAsState()
 
     LaunchedEffect(key1 = register?.value) {
         when (register?.value) {
-            is Resource.Success -> navigateToLogin()
+            is Resource.Success -> {
+                Toast.makeText(context, "Registration Success!", Toast.LENGTH_SHORT).show()
+                navigateToLogin()
+            }
         }
     }
 
@@ -161,7 +168,9 @@ fun RegisterContent(viewModel: RegisterViewModel? = null) {
     }
 }
 
-@Preview
+@Preview(
+    device = Devices.PIXEL_2
+)
 @Composable
 private fun PreviewScreen() {
     RegisterScreen()

@@ -67,8 +67,10 @@ class QuizViewModel @Inject constructor(private val quizRepository: QuizReposito
         viewModelScope.launch {
             runCatching {
                 _quiz.value = Resource.Loading()
-                val response = quizRepository.getRandomQuiz()
-                _quiz.value = Resource.Success(response)
+                val response = quizRepository.getAllQuiz()
+                val data = response.data.shuffled()
+                println(data.size)
+                _quiz.value = Resource.Success(response.copy(data = data))
             }.getOrElse {
                 it.printStackTrace()
                 _quiz.value = Resource.Error(it)
@@ -83,7 +85,7 @@ class QuizViewModel @Inject constructor(private val quizRepository: QuizReposito
                 val response = value.data.data[quizItemCount.value].choices.filter {
                      it.id == tappedAnswerId.value
                 }
-                answer = response.first().isTrue
+                answer = response.firstOrNull()?.isTrue == true
                 if (answer) correctQuizAnswer.value++
                 answer
             }

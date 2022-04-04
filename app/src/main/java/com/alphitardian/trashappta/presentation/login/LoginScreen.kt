@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -247,7 +248,9 @@ fun LoginContent(
 
 @ExperimentalPermissionsApi
 @Composable
-@Preview
+@Preview(
+    device = Devices.PIXEL_2
+)
 private fun PreviewScreen() {
     LoginScreen()
 }

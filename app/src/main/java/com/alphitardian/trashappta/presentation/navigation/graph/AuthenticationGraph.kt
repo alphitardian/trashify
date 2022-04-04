@@ -33,7 +33,16 @@ fun NavGraphBuilder.authenticationGraph(navController: NavController) {
         }
         composable(route = Destination.REGISTER.name) {
             val registerViewModel = hiltViewModel<RegisterViewModel>()
-            RegisterScreen(registerViewModel)
+            RegisterScreen(
+                viewModel = registerViewModel,
+                navigateToLogin = {
+                    navController.navigate(Destination.LOGIN.name) {
+                        popUpTo(Destination.REGISTER.name) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }

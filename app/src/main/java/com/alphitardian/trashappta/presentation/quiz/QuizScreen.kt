@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -50,7 +51,10 @@ fun QuizScreen(
         topBar = { QuizTopBar(navigateBack = navigateBack) },
         content = {
             when (val value = quiz?.value) {
-                is Resource.Success -> QuizSession(viewModel, value.data, navigateToResult)
+                is Resource.Success -> {
+                    println("final: ${value.data.data.size}")
+                    QuizSession(viewModel, value.data, navigateToResult)
+                }
                 else -> QuizContent(viewModel)
             }
         }
@@ -190,11 +194,15 @@ fun QuizSession(
 
             Text(
                 text = quizResponse.data[viewModel.quizItemCount.value].question.orEmpty(),
-                modifier = Modifier.constrainAs(questionRef) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(imageRef.bottom, margin = 20.dp)
-                }
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(questionRef) {
+                        start.linkTo(parent.start, margin = 20.dp)
+                        end.linkTo(parent.end, margin = 20.dp)
+                        top.linkTo(imageRef.bottom, margin = 20.dp)
+                        width = Dimension.preferredWrapContent
+                    }
             )
 
             Row(
@@ -223,7 +231,7 @@ fun QuizSession(
                                 width = if (selectedAnswer.value == index) 2.dp else (-1).dp,
                                 color = Color.Green,
                             )
-                            .clip(shape = RoundedCornerShape(8.dp),)
+                            .clip(shape = RoundedCornerShape(8.dp))
                             .background(
                                 if (selectedAnswer.value == index) Color.Green.copy(0.3f)
                                 else Color.LightGray

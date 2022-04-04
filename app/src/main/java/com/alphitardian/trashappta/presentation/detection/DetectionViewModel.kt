@@ -88,9 +88,9 @@ class DetectionViewModel @Inject constructor(
                     println("result " + labels)
                     _detection.value = Resource.Success(true)
                 }
-                .addOnFailureListener {
-                    result.value = "fail"
-                    _detection.value = Resource.Error(it)
+                .addOnFailureListener { exception ->
+                    result.value = exception.message.orEmpty()
+                    _detection.value = Resource.Error(exception)
                 }
                 .addOnCanceledListener {
                     result.value = "cancel"
