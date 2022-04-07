@@ -29,7 +29,7 @@ class QuizViewModel @Inject constructor(private val quizRepository: QuizReposito
     val correctQuizAnswer = mutableStateOf(0)
 
     var START_COUNTDOWN_TIMER = 3
-    var START_QUIZ_TIMER = 10
+    var START_QUIZ_TIMER = 20
 
     var countDownTimer: CountDownTimer? = null
     var quizTimer: CountDownTimer? = null
@@ -46,7 +46,7 @@ class QuizViewModel @Inject constructor(private val quizRepository: QuizReposito
         countDownTimer = null
         quizTimer = null
         START_COUNTDOWN_TIMER = 3
-        START_QUIZ_TIMER = 10
+        START_QUIZ_TIMER = 20
         isCountdown.value = true
         _quiz.value = Resource.Loading()
     }

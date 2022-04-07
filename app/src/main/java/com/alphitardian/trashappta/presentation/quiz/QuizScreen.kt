@@ -223,7 +223,7 @@ fun QuizSession(
                                     selectedAnswer.value = index
                                     viewModel.quizTimer?.cancel()
                                     isQuizRunning.value = false
-                                    viewModel.START_QUIZ_TIMER = 10
+                                    viewModel.START_QUIZ_TIMER = 20
                                 },
                                 enabled = isQuizRunning.value
                             )
@@ -348,7 +348,7 @@ private fun quizTimer(
     onTextChange: (String) -> Unit,
     onActive: (Boolean) -> Unit,
 ) {
-    viewModel.quizTimer = object : CountDownTimer(10000, 1000) {
+    viewModel.quizTimer = object : CountDownTimer(20000, 1000) {
         override fun onTick(p0: Long) {
             onTextChange(viewModel.START_QUIZ_TIMER.toString())
             viewModel.START_QUIZ_TIMER--
@@ -357,7 +357,7 @@ private fun quizTimer(
         override fun onFinish() {
             onTextChange("0")
             onActive(false)
-            viewModel.START_QUIZ_TIMER = 10
+            viewModel.START_QUIZ_TIMER = 20
         }
     }
     if (!viewModel.isCountdown.value) {
