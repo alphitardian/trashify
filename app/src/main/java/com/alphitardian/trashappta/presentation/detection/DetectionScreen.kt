@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -81,7 +82,7 @@ fun DetectionScreen(
                     else -> Unit
                 }
             },
-            topBar = { DetectionAppBar(navigateBack = navigateBack)},
+            topBar = { DetectionAppBar(navigateBack = navigateBack) },
             content = { DetectionContent(viewModel) }
         )
         when (detection?.value) {
@@ -170,7 +171,7 @@ fun DetectionContent(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp)
+                    .height(350.dp)
                     .constrainAs(imageRef) {
                         start.linkTo(parent.start, margin = 20.dp)
                         end.linkTo(parent.end, margin = 20.dp)
@@ -226,7 +227,7 @@ fun DetectionContent(
                     .constrainAs(resultTextRef) {
                         start.linkTo(parent.start, margin = 20.dp)
                         end.linkTo(parent.end, margin = 20.dp)
-                        top.linkTo(imageRef.bottom, margin = 64.dp)
+                        top.linkTo(imageRef.bottom, margin = 32.dp)
                         width = Dimension.preferredWrapContent
                     }
             )
@@ -323,8 +324,21 @@ fun DetectionAppBar(navigateBack: () -> Unit) {
 }
 
 @ExperimentalMaterialApi
-@Preview
+@Preview(
+    name = "16:9 Preview",
+    device = Devices.PIXEL_2
+)
 @Composable
-fun PreviewScreen() {
+fun PreviewScreenSmall() {
+    DetectionScreen()
+}
+
+@ExperimentalMaterialApi
+@Preview(
+    name = "18:9 Preview",
+    device = Devices.PIXEL_4
+)
+@Composable
+fun PreviewScreenLarge() {
     DetectionScreen()
 }

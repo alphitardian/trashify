@@ -176,7 +176,7 @@ fun QuizSession(
                 modifier = Modifier
                     .padding(20.dp)
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(250.dp)
                     .constrainAs(imageRef) {
                         start.linkTo(parent.start, margin = 20.dp)
                         top.linkTo(parent.top, margin = 20.dp)

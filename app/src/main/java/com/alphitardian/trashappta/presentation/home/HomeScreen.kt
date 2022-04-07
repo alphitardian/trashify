@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -283,8 +284,20 @@ fun HomeTopAppBar(
     )
 }
 
-@Preview
+@Preview(
+    name = "16:9 Preview",
+    device = Devices.PIXEL_2
+)
 @Composable
-fun PreviewHomeScreen() {
+fun PreviewHomeScreenSmall() {
+    HomeScreen()
+}
+
+@Preview(
+    name = "18:9 Preview",
+    device = Devices.PIXEL_4
+)
+@Composable
+fun PreviewHomeScreenLarge() {
     HomeScreen()
 }

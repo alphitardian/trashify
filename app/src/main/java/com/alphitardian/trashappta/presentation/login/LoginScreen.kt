@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
@@ -35,7 +34,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
-import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
 @ExperimentalPermissionsApi
@@ -132,7 +130,7 @@ fun LoginContent(
             .fillMaxSize()
     ) {
         val (emailFieldRef, passwordFieldRef, loginButtonRef, imageRef, greetingRef, greetingDescRef, registerButtonRef) = createRefs()
-        
+
         LottieAnimation(
             composition = greetingAnimationSpec,
             progress = progress,
